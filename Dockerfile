@@ -18,7 +18,7 @@ RUN apk add build-base
 WORKDIR /src
 
 # restore dependencies
-COPY go.mod go.sum ./
+COPY ./frontend/go.mod ./frontend/go.sum ./
 RUN go mod download
 COPY ./frontend .
 
