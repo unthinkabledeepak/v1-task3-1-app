@@ -1,0 +1,36 @@
+node {
+    def app
+
+    stage('Clone repository') {
+      
+
+        checkout scm
+    }
+
+    stage('Build image') {
+  
+       app = docker.build("deepakc826/v1-task3",'./cartservice/src')
+       // app = sh 'docker build -t your-image-name .'
+    }
+
+    stage('Test image') {
+  
+             sh 'echo "Tests passed"'
+        // app.inside {
+        //     sh 'echo "Tests passed"'
+        // }
+    }
+
+    stage('Push image') {
+        
+        docker.withRegistry('https://registry.hub.docker.com', 'dockerhub') {
+            app.push("frontend-${env.BUILD_NUMBER}")
+        }
+    }
+    
+    stage('Trigger ManifestUpdate') {
+                echo "triggering updatemanifestjob"
+                build job: 'updatemanifesttask3-1', parameters: [string(name: 'DOCKERTAG', value: env.BUILD_NUMBER), string(name: 'APPIMAGE', value: 'cartservice')]
+        
+        }
+}
