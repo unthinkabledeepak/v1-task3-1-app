@@ -9,7 +9,8 @@ node {
 
     stage('Build image') {
   
-       app = docker.build("deepakc826/v1-task3")
+       app = docker.build("deepakc826/v1-task3",'./frontend')
+       // app = sh 'docker build -t your-image-name .'
     }
 
     stage('Test image') {
